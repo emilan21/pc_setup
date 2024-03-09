@@ -1,0 +1,6 @@
+---
+# tasks file for slideshow
+- name: Copy slideshow text file
+  copy:
+    src: "{{ file_path }}"
+    dest: ~/slideshow.txt

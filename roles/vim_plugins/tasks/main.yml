@@ -1,0 +1,16 @@
+---
+# tasks file for vim_plugins
+- name: Install vim plug addon
+  command: /usr/bin/curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  args:
+    chdir: ~/
+
+- name: Install vim plugins via PlugInstall
+  command: /usr/bin/vim +PlugInstall +qall
+  args:
+    chdir: ~/
+
+- name: Install YouCompleteMe
+  command: /usr/bin/python3 install.py --all
+  args:
+    chdir: ~/.vim/plugged/YouCompleteMe
