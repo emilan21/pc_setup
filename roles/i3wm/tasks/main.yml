@@ -2,12 +2,13 @@
 # tasks file for i3wm
 
 - name: Install i3wm packages
-  packages:
+  package:
     name:
       - i3-wm
       - i3status
       - dmenu
       - perl-anyevent-i3
+  become: true
 
 - name: Check if directories exist
   stat:

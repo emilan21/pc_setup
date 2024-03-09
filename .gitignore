@@ -1,3 +1,4 @@
 playbooks/vars
 playbooks/files
 playbooks/templates
+*.tar.gz
