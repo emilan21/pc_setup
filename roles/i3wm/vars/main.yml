@@ -1,0 +1,5 @@
+---
+# vars file for i3wm
+directories:
+  - ~/.config/i3status
+  - ~/.config/i3

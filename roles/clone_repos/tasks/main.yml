@@ -1,0 +1,13 @@
+---
+# tasks file for clone_repos
+- name: Clone git repos
+  git:
+    repo: "{{ item }}"
+    dest: "~/code/{{ item | basename }}"
+    accept_hostkey: true
+  loop: "{{ git_repos }}"
+  register: clone_command_res
+
+- name: Only allow the expected failure
+  assert:
+    that: "not clone_command_res['failed'] or 'already exists and is not an empty directory' in clone_command_res['msg'].lower()"

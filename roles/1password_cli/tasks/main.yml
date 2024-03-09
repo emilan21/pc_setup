@@ -1,0 +1,26 @@
+---
+# tasks file for 1password_cli
+- name: Install 1password cli on Arch Linux
+  block:
+    - name: Run script to install 1password cli on Arch Linux
+      script: "files/1password_cli.sh"
+  when: ansible_facts['distribution'] == 'Archlinux'
+  become: true
+
+- name: Install 1password cli on OSX
+  block:
+    - name: Install 1password cli on OSX with homebrew
+      homebrew:
+        name: 1password-cli
+        state: present
+  when: ansible_facts['distribution'] == 'Darwin'
+  become: true
+
+- name: Install 1password cli on Windows
+  block:
+    - name: Install 1password cli on Windows with Scoop
+      ansible.windows.win_powershell:
+        script: |
+          scoop install 1password-cli
+  when: ansible_facts['distribution'] == 'Windows'
+  become: true

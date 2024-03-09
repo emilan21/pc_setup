@@ -1,0 +1,3 @@
+playbooks/vars
+playbooks/files
+playbooks/templates

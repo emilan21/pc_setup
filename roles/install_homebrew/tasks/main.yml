@@ -1,0 +1,19 @@
+---
+# tasks file for install_homebrew
+- name: Ensuring Homebrew Is Installed
+  stat:
+    path: /usr/local/bin/brew
+  register: homebrew_check
+
+- name: Fail If Homebrew Is Not Installed and install_homebrew_if_missing Is False
+  fail:
+    msg: Homebrew is missing, install from http://brew.sh
+  when:
+    - not homebrew_check.stat.exists
+    - not install_homebrew_if_missing
+
+- name: Installing Homebrew
+  shell: /usr/bin/ruby -e "$(curl -fsSL {{ homebrew_url }})"
+  when:
+    - not homebrew_check.stat.exists
+    - install_homebrew_if_missing

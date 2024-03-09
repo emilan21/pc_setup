@@ -1,0 +1,24 @@
+---
+# tasks file for i3wm
+
+- name: Install i3wm packages
+  packages:
+    name:
+      - i3-wm
+      - i3status
+      - dmenu
+      - perl-anyevent-i3
+
+- name: Check if directories exist
+  stat:
+    path: "{{ item }}"
+  with_items: "{{ directories }}"
+  register: directory_stats
+
+- name: "Creating i3wm directories"
+  file:
+    path: "{{item.item}}"
+    state: directory
+    mode: 0755
+  when: item.stat.exists == false
+  with_items: "{{ directory_stats.results }}"

@@ -1,0 +1,9 @@
+---
+# tasks file for virtualbox_setup
+- name: Install packages
+  package:
+    name:
+      - virtualbox,
+      - virtualbox-guest-iso,
+    state: present
+  become: true

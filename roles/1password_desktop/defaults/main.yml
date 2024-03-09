@@ -1,0 +1,5 @@
+---
+# defaults file for 1password_desktop
+gpg_key: "https://downloads.1password.com/linux/keys/1password.asc"
+aur_repo: "https://aur.archlinux.org/1password.git"
+windows_exe: "https://downloads.1password.com/win/1PasswordSetup-latest.exe"

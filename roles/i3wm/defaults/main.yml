@@ -1,0 +1,5 @@
+---
+# defaults file for i3wm
+directories:
+  - ~/.config/i3
+  - ~/.config/i3status

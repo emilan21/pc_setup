@@ -1,0 +1,22 @@
+network:
+  ethernets:
+    {{ interface }}:
+      dhcp4: false
+      dhcp6: false
+  # add configuration for bridge interface
+  bridges:
+    {{ bridge_interface }}:
+      interfaces: [{{ interface }}]
+      dhcp4: false
+      addresses: [{{ addresses }}]
+      macaddress: {{ macaddress }}
+      routes:
+        - to: default
+          via: "{{ default_route }}"
+          metric: 100
+      nameservers:
+        addresses: [{{ nameservers }}]
+      parameters:
+        stp: false
+      dhcp6: false
+  version: 2

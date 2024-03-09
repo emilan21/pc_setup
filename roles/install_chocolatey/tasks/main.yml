@@ -1,0 +1,7 @@
+---
+# tasks file for install_chocolatey
+- name: Install Chocolatey
+  win_chocolatey:
+    name: chocolatey
+    state: present
+    source: "{{ chocolatey_url }}"

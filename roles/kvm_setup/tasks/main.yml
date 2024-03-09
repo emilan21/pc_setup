@@ -1,0 +1,84 @@
+---
+# tasks file for kvm_setup
+- name: Install virt packages
+  apt:
+    name:
+      - bridge-utils
+      - virt-manager
+      - virtinst
+      - cpu-checker
+      - libvirt-clients
+      - libvirt-daemon
+      - guestfs-tools
+      - python3-libvirt
+      - qemu-kvm
+      - qemu-utils
+      - python3-lxml
+    state: latest
+    update_cache: true
+
+- name: Add user to libvirt group
+  user:
+    name: "{{ user }}"
+    groups: libvirt
+    append: true
+
+- name: Add user to kvm group
+  user:
+    name: "{{ user }}"
+    groups: kvm
+    append: true
+
+- name: Copy ssh key for root user on domains
+  copy:
+    src: "{{ public_ssh_key_for_domains }}"
+    dest: "{{ public_ssh_key_for_domains }}"
+
+- name: Create images under home dir
+  file:
+    path: "/home/{{ user }}/images"
+    state: directory
+    recurse: true
+    owner: "{{ user }}"
+    group: kvm
+
+- name: Find all vmlinuz-* files
+  find:
+    paths: /boot/
+    patterns: "vmlinuz-*"
+  register: files_to_change
+
+- name: Change vmlinuz permissions because of a bug that is not fixed in ubuntu
+  file:
+    path: "{{ item.path }}"
+    mode: a+r
+  with_items: "{{ files_to_change.files }}"
+
+- name: Copy qemu.conf template to server
+  template:
+    src: qemu.conf.j2
+    dest: /etc/libvirt/qemu.conf
+
+- name: Copy libvirtd.conf file to server
+  copy:
+    src: libvirtd.conf
+    dest: /etc/libvirt/libvirtd.conf
+
+- name: Start and enabled libvirtd
+  service:
+    name: libvirtd
+    enabled: true
+    state: started
+
+- name: Copy netcfg tempalte to server
+  template:
+    src: 01-netcfg.yaml.j2
+    dest: /etc/netplan/01-netcfg.yaml
+
+- name: Run netplan apply
+  command: /usr/sbin/netplan apply
+
+- name: Reboot after doing everything
+  reboot:
+  tags:
+    - reboot

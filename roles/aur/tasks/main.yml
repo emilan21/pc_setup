@@ -1,0 +1,14 @@
+---
+# tasks file for aur
+- name: Download and untar aur tar.gz files
+  unarchive:
+    src: "{{ item }}"
+    dest: "/tmp"
+    remote_src: true
+  loop: "{{ aur_urls }}"
+
+- name: Run makepkg in aur package directory
+  command: makepkg -sri --noconfirm
+  args:
+    chdir: /tmp/{{ item | basename | regex_replace(".tar.gz", "") }}
+  loop: "{{ aur_urls }}"

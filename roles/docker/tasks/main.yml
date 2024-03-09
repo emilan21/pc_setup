@@ -1,0 +1,52 @@
+---
+# tasks file for docker
+- name: Install required packes
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    state: present
+    update_cache: true
+  become: true
+
+- name: Add GPG key
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+  become: true
+
+- name: Add APT source
+  shell: echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+  become: true
+
+- name: Update apt cache
+  apt:
+    update_cache: true
+  become: true
+
+- name: Use apt cache instead of built in ubuntu package
+  shell: apt-cache policy docker-ce
+  become: true
+
+- name: Install docker
+  apt:
+    name: docker-ce
+    state: present
+  become: true
+
+- name: Add user to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: true
+  become: true
+
+- name: Download and install docker composer
+  shell: curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  become: true
+
+- name: Change file permissions for docker compose
+  file:
+    path: /usr/local/bin/docker-compose
+    mode: a+x
+  become: true

@@ -1,0 +1,142 @@
+---
+- hosts: all
+  gather_facts: true
+
+  pre_tasks:
+    # For OSX
+    - name: Install Homebrew if host is mac
+      include_role:
+        name: emilan.main.install_homebrew
+      when: ansible_facts['distribution'] == 'Darwin'
+
+    # For Windows
+    - name: Install Chocolatey if host is windows
+      include_role:
+        name: emilan.main.install_chocolatey
+      when: ansible_facts['distribution'] == 'Windows'
+
+    # For Arch Linux
+    - name: Install pre req packages if host is arch
+      package:
+        name:
+          - git
+          - unzip
+          - firefox
+          - fakeroot
+          - wget
+          - vim
+          - vi
+        state: present
+        update_cache: true
+      when: ansible_facts['distribution'] == 'Archlinux'
+      become: true
+
+    - name: Update host if it is arch
+      package:
+        upgrade: true
+      when: ansible_facts['distribution'] == 'Archlinux'
+      become: true
+
+    # Install 1password
+    - name: Install 1password Desktop App
+      include_role:
+        name: emilan.main.1password_desktop
+
+    # Install 1password cli
+    - name: Install 1password Cli App
+      include_role:
+        name: emilan.main.1password_cli
+
+  tasks:
+    - name: Include var file
+      include_vars:
+        file: home_vars.yml
+
+    - name: Include create_directories role
+      include_role:
+        name: emilan.main.create_directories
+
+    - name: Include install_packages role
+      include_role:
+        name: emilan.main.install_packages
+
+    - name: Include kvm_setup role
+      include_role:
+        name: emilan.main.kvm_setup
+      when: kvm == true
+
+    - name: Include virtualbox_setup role
+      include_role:
+        name: emilan.main.virtualbox_setup
+      when: virtualbox == true
+
+    - name: Include git_config role
+      include_role:
+        name: emilan.main.git_config
+
+    - name: Include i3wm role
+      include_role:
+        name: emilan.main.i3wm
+      when: i3wm == true
+
+    - name: Include kde role
+      include_role:
+        name: emilan.main.kde
+      when: kde == true
+
+    - name: Include steam role
+      include_role:
+        name: emilan.main.steam
+      when: steam == true
+
+    - name: Include copy_files role
+      include_role:
+        name: emilan.main.copy_files
+
+    - name: Include dotfiles role
+      include_role:
+        name: emilan.main.dotfiles
+
+    - name: Include vim_plugins role
+      include_role:
+        name: emilan.main.vim_plugins
+
+    - name: Include aur role
+      include_role:
+        name: emilan.main.aur
+
+    - name: Include gem_packages role
+      include_role:
+        name: emilan.main.gem_packages
+
+    - name: Include ssh_keys role
+      include_role:
+        name: emilan.main.ssh_keys
+
+    - name: Include ssh_config role
+      include_role:
+        name: emilan.main.ssh_config
+
+    - name: Include cron role
+      include_role:
+        name: emilan.main.cron
+      when: cron == true
+
+    - name: Include sshd role
+      include_role:
+        name: emilan.main.sshd
+      when: sshd == true
+
+    - name: Include docker role
+      include_role:
+        name: emilan.main.docker
+      when: docker == true
+
+      #- name: Include clone_repos role
+      #  include_role:
+      #    name: emilan.main.clone_repos
+
+    - name: Include reboot role
+      include_role:
+        name: emilan.main.reboot
+      when: reboot == true

@@ -1,0 +1,52 @@
+---
+# tasks file for 1password_desktop
+- name: Install 1password Desktop App on Arch Linux
+  block:
+    - name: Download and install GPG key
+      shell: curl -sS {{ gpg_key }} | gpg --import
+
+    - name: Check if 1password repo exist
+      stat:
+        path: "~/1password"
+      register: result
+
+    - name: Git clone 1password repo
+      git:
+        repo: "{{ aur_repo }}"
+        dest: "~/1password"
+      when: not result.stat.exists
+
+    - name: Check if 1password is installed
+      package_facts:
+        manager: auto
+
+    - name: Run makepkg -si in 1password directory
+      command: "makepkg -si --noconfirm"
+      args:
+        chdir: "~/1password"
+      when: not "'1password' in ansible_facts.packages"
+
+    - name: Delete 1password repo
+      file:
+        path: "~/1password"
+        state: absent
+  when: ansible_facts['distribution'] == 'Archlinux'
+
+- name: Install 1password Desktop App on OSX
+  block:
+    - name: Install 1Password Desktop App
+      homebrew:
+        name: 1password
+        state: present
+
+  when: ansible_facts['distribution'] == 'Darwin'
+  become: true
+
+- name: Install 1password Desktop App on Windows
+  block:
+    - name: Download 1password desktop app
+      win_package:
+        path: "{{ windows_exe }}"
+        arguments: /install /passive /norestart
+  when: ansible_facts['distribution'] == 'Windows'
+  become: true

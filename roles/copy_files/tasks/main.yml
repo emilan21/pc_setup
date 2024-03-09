@@ -1,0 +1,7 @@
+---
+# tasks file for copy_files
+- name: Copy files/directories to ~/
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop: "{{ files }}"

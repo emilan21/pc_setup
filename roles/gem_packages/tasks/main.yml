@@ -1,0 +1,7 @@
+---
+# tasks file for gem_install
+- name: Instll gem packages
+  gem:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ gem_packages }}"
