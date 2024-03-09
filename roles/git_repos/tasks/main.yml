@@ -1,0 +1,17 @@
+---
+# tasks file for git_repos
+- name: Check if git repo exist already
+  stat:
+    path: "{{ item }}"
+  register: results
+  loop: "{{ git_repos }}"
+
+- name: Git clone repo if it doesn't exist
+  git:
+    repo: "{{ item }}"
+    dest: "{{ local_path_for_repos }}/{{ item | basename }}"
+    single_branch: treu
+    version: master
+    accept_hostkey: true
+  when: not results.stat.exists
+  loop: "{{ git_repos }}"
