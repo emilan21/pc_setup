@@ -1,0 +1,30 @@
+---
+# tasks file for xorg
+- name: Install xorg
+  package:
+    name: xorg
+    state: present
+  become: true
+
+- name: Install Nvidia Drivers
+  package:
+    name:
+      - nvidia
+      - lib32-nvidia-utils
+    state: present
+  become: true
+  when: nvidia == true
+
+- name: Uninstall other virtualbox drivers
+  package:
+    name: virtualbox-guest-utils-nox
+    state: absent
+  become: true
+  when: virtualbox_drivers == true
+
+- name: Install virtualbox drivers
+  package:
+    name: virtualbox-guest-utils
+    state: present
+  become: true
+  when: virtualbox_drivers == true

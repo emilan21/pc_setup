@@ -1,0 +1,20 @@
+---
+# tasks file for enlightenment
+- name: Install enlightenment and related with packages
+  package:
+    name:
+      - enlightenment
+      - ecrire
+      - ephoto
+      - evisum
+      - rage
+      - terminology
+      - sddm
+    state: present
+  become: true
+
+- name: Enable sddm
+  service:
+    name: sddm
+    enabled: true
+  become: true

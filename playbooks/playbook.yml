@@ -16,6 +16,13 @@
       when: ansible_facts['distribution'] == 'Windows'
 
     # For Arch Linux
+    - name: Copy template for pacman_config
+      template:
+        src: pacman.conf.j2
+        dest: /etc/pacman.conf
+      become: true
+      when: ansible_facts['distribution'] == 'Archlinux'
+
     - name: Install pre req packages if host is arch
       package:
         name:
@@ -83,6 +90,31 @@
       include_role:
         name: kde
       when: kde == true
+
+    - name: Include budgie role
+      include_role:
+        name: budgie
+      when: budgie == true
+
+    - name: Include enlightenment role
+      include_role:
+        name: enlightenment
+      when: enlightenment == true
+
+    - name: Include twm role
+      include_role:
+        name: twm
+      when: twm == true
+
+    - name: Include awesome role
+      include_role:
+        name: awesome
+      when: awesome == true
+
+    - name: Include gnome role
+      include_role:
+        name: gnome
+      when: gnome == true
 
     - name: Include steam role
       include_role:

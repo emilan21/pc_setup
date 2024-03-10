@@ -1,0 +1,15 @@
+---
+# tasks file for gnome
+- name: Install gnome and related packages
+  package:
+    name:
+      - gnome
+      - gnome-extra
+    state: present
+  become: true
+
+- name: Enable gdm
+  service:
+    name: gdm
+    enabled: true
+  become: true

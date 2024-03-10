@@ -1,0 +1,15 @@
+---
+# tasks file for twm
+- name: Install twm
+  package:
+    name:
+      - xorg-twm
+      - sddm
+    state: present
+  become: true
+
+- name: Enable sddm
+  service:
+    name: sddm
+    enabled: true
+  become: true
