@@ -4,6 +4,7 @@
 - name: Install i3wm packages
   package:
     name:
+      - lightdm
       - i3-wm
       - i3status
       - dmenu
@@ -23,3 +24,9 @@
     mode: 0755
   when: item.stat.exists == false
   with_items: "{{ directory_stats.results }}"
+
+- name: Enable lightdm
+  service:
+    name: lightdm
+    enabled: true
+  become: true

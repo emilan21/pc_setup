@@ -74,10 +74,6 @@
       include_role:
         name: git_config
 
-    - name: Install lightdm
-      include_role:
-        name: lightdm
-
     - name: Include i3wm role
       include_role:
         name: i3wm

@@ -1,0 +1,16 @@
+---
+# tasks file for kde
+- name: Install kde
+  package:
+    name:
+      - sddm
+      - plasma
+      - kde-applications
+    state: present
+  become: true
+
+- name: Enable sddm
+  service:
+    name: sddm
+    enabled: true
+  become: true

@@ -1,0 +1,5 @@
+---
+# tasks file for reboot
+- name: Reboot Linux
+  reboot:
+  become: true
