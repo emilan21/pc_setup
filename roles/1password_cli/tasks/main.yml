@@ -22,12 +22,3 @@
         state: present
   when: ansible_facts['distribution'] == 'Darwin'
   become: true
-
-- name: Install 1password cli on Windows
-  block:
-    - name: Install 1password cli on Windows with Scoop
-      ansible.windows.win_powershell:
-        script: |
-          scoop install 1password-cli
-  when: ansible_facts['distribution'] == 'Windows'
-  become: true
