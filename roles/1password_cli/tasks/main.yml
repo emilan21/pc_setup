@@ -3,7 +3,7 @@
 - name: Install 1password cli on Arch Linux
   block:
     - name: Run script to install 1password cli on Arch Linux
-      script: "files/1password_cli.sh"
+      script: "files/1password_cli_ubuntu.sh"
   when: ansible_facts['distribution'] == 'Archlinux'
   become: true
 
