@@ -7,6 +7,13 @@
   when: ansible_facts['distribution'] == 'Archlinux'
   become: true
 
+- name: Install 1password cli on Ubuntu Linux
+  block:
+    - name: Run script to install 1password cli on Ubuntu Linux
+      script: "files/1password_cli.sh"
+  when: ansible_facts['distribution'] == 'Ubuntu'
+  become: true
+
 - name: Install 1password cli on OSX
   block:
     - name: Install 1password cli on OSX with homebrew
